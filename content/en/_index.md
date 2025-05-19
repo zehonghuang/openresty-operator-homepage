@@ -61,4 +61,6 @@ I love open source, love engineering — and love speed and passion.
 One more thing: Ferrari, forever. 🏎️🔥  
 {.text-center}
 
+<img src="images/meme03.jpg" alt="meme" style="max-width:200px; display:block; margin:auto;" />
+
 {{% /blocks/section %}}
