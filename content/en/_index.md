@@ -22,31 +22,18 @@ No etcd. No admin API. Just declarative CRDs and GitOps.
 {{% /blocks/lead %}}
 
 {{% blocks/section color="dark" type="row" %}}
+{{% blocks/feature icon="fa-lightbulb" title="Namespace-based Multi-Tenancy" %}}
+Isolate configurations by namespace — simple and effective for multi-tenant environments.
+{{% /blocks/feature %}}
 
 {{% blocks/feature icon="fa-lightbulb" title="Smarter API Normalization" %}}
 Added `NormalizeRule` CRD for request/response mapping, enabling payload unification across multiple upstream APIs.
 {{% /blocks/feature %}}
 
-{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="https://github.com/zehonghuang/openresty-operator" %}}
-We do a [Pull Request](https://github.com/zehonghuang/openresty-operator/pulls) contributions workflow on **GitHub**. New users are always welcome!
+{{% blocks/feature icon="fa-lightbulb" title="Built-in Observability" %}}
+Export global Prometheus metrics out of the box — effortlessly track API calls and system behavior.
 {{% /blocks/feature %}}
-
-{{% blocks/feature icon="fab fa-weixin" title="WeChat"%}}
-Add me on WeChat to discuss DevOps, Kubernetes, and open source!
-<div style="position: relative; display: inline-block;">
-  <a href="javascript:void(0)" style="text-decoration: underline; color: #b4c5e4;">
-    Read more
-  </a>
-  <img src="/images/wechat-qr.jpg"
-       alt="WeChat QR"
-       style="display: none; position: absolute; top: 30px; left: 0; width: 200px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.3);"
-       onload="this.parentElement.onmouseenter = () => this.style.display = 'block';
-                this.parentElement.onmouseleave = () => this.style.display = 'none';" />
-</div>
-{{% /blocks/feature %}}
-
 {{% /blocks/section %}}
-
 
 {{% blocks/section %}}
 These are my personal open source projects.  
@@ -61,3 +48,30 @@ One more thing: Ferrari, forever. 🏎️🔥
 
 <img src="images/meme03.jpg" alt="meme" style="max-width:200px; display:block; margin:auto;" />
 {{% /blocks/section %}}
+
+{{% blocks/section color="blue" type="row" %}}
+{{% blocks/feature icon="fab fa-weixin" title="WeChat"%}}
+Add me on WeChat to discuss DevOps, Kubernetes, and open source!
+<div style="position: relative; display: inline-block;">
+  <a href="javascript:void(0)" style="text-decoration: underline; color: #b4c5e4;">
+    Read more
+  </a>
+  <img src="/images/wechat-qr.jpg"
+       alt="WeChat QR"
+       style="display: none; position: absolute; top: 30px; left: 0; width: 200px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.3);"
+       onload="this.parentElement.onmouseenter = () => this.style.display = 'block';
+                this.parentElement.onmouseleave = () => this.style.display = 'none';" />
+</div>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="https://github.com/zehonghuang/openresty-operator" %}}
+We do a [Pull Request](https://github.com/zehonghuang/openresty-operator/pulls) contributions workflow on **GitHub**. New users are always welcome!
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fa-solid fa-house" title="My Blog!" url="https://huangzehong.me" %}}
+Yeah, only in Chinese.😂
+{{% /blocks/feature %}}
+
+{{% /blocks/section %}}
+
+
