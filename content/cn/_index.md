@@ -9,17 +9,20 @@ title: Openresty-Operator
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/zehonghuang/openresty-operator">
   Download <i class="fab fa-github ms-2 "></i>
 </a>
-<p class="lead mt-5">一个轻量级的 Kubernetes Operator，用于管理 OpenResty 作为内部 API 网关的控制面。</p>
+<p class="lead mt-5">使用 GitOps 实现 API 网关标准化。更简洁地管理第三方服务。</p>
 {{< blocks/link-down color="info" >}}
 {{< /blocks/cover >}}
 
 
 {{% blocks/lead color="primary" %}}
-OpenResty Operator 通过 GitOps 原生、CRD 驱动的方式管理内部 API 代理服务 —— 无需 etcd 或 Admin API。
+**什么是 OpenResty Operator？**
+
+一个轻量级的 Kubernetes Operator，用于内部 API 网关管理。
+无需 etcd，无需管理 API。仅使用声明式 CRD 和 GitOps。
 {{% /blocks/lead %}}
 
-
 {{% blocks/section color="dark" type="row" %}}
+
 {{% blocks/feature icon="fa-lightbulb" title="更智能的 API 报文归一化" %}}
 新增 NormalizeRule CRD，用于请求与响应的结构映射，支持多上游 API 的报文统一处理。
 
