@@ -30,7 +30,7 @@ Download <i class="fab fa-github ms-2 "></i>
 使用 NormalizeRule CRD 实现请求与响应的格式映射，统一多个上游 API 的参数结构。
 {{% /blocks/feature %}}
 
-{{% blocks/feature icon="fa-lightbulb" title="可观测性内建" %}}
+{{% blocks/feature icon="fa-lightbulb" title="可观测性" %}}
 内建全局 Prometheus 指标导出，开箱即用，轻松监控 API 调用与系统状态。
 {{% /blocks/feature %}}
 {{% /blocks/section %}}
