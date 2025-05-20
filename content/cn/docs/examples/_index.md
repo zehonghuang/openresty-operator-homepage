@@ -1,12 +1,12 @@
 ---
-title: Examples
-description: See your project in action with practical CRD configurations.
+title: 示例
+description: 通过实际的 CRD 配置了解项目如何运行。
 weight: 4
 ---
 
 {{% pageinfo %}}
-This section provides usage examples for each core CRD in OpenResty Operator.
-Each block will include a representative YAML configuration and explanation.
+本节提供了 OpenResty Operator 中各个核心 CRD 的使用示例。  
+每个小节都包含一个代表性的 YAML 配置及其说明。
 {{% /pageinfo %}}
 
 ## OpenResty 示例
