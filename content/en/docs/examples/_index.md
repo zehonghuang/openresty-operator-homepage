@@ -86,6 +86,51 @@ spec:
 
 ## Location Example
 
+The `Location` CR defines the routing rules for each Nginx `location` block, typically bound to specific paths. Each entry maps a path to a corresponding backend service or URL.
+
+- `proxyPass`: The upstream target, can be a service name (for internal Kubernetes Service) or a full URL.
+- `proxyPassIsFullURL`: If true, the proxyPass will be treated as a full URL and rendered via dynamic Lua logic.
+- `headersFromSecret`: Injects sensitive headers (like API keys) from Kubernetes Secrets.
+- `enableUpstreamMetrics`: Enables Prometheus metrics collection for this route.
+
+Below is an example:
+
+```yaml
+apiVersion: openresty.huangzehong.me/v1alpha1
+kind: Location
+metadata:
+  name: sample-location
+  namespace: openresty-example
+spec:
+  entries:
+    - path: /openai/
+      proxyPass: https://openai-api/
+      enableUpstreamMetrics: true
+      accessLog: true
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+    - path: /eth/
+      proxyPass: https://eth-api/
+      proxyPassIsFullURL: true
+      enableUpstreamMetrics: true
+      accessLog: true
+      headersFromSecret:
+        - headerName: apikey
+          secretName: apikey
+          secretKey: apikey
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+    - path: /pay
+      proxyPass: https://pay-api/
+      proxyPassIsFullURL: true
+      enableUpstreamMetrics: true
+      accessLog: true
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+```
 
 ## Upstream Example
 

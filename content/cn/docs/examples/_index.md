@@ -86,6 +86,50 @@ spec:
 
 ## Location 示例
 
+`Location` CR 定义了每个 Nginx `location` 区块的路由规则，通常绑定到具体的路径。每条 entry 都会将一个路径映射到一个后端服务或目标地址。
+
+- `proxyPass`: 目标地址，可以是 Kubernetes Service 名称，也可以是完整的 URL。
+- `proxyPassIsFullURL`: 若为 true，则将 `proxyPass` 视为完整 URL，并通过动态 Lua 逻辑进行转发。
+- `headersFromSecret`: 从 Kubernetes Secret 中注入敏感请求头（如 API Key）。
+- `enableUpstreamMetrics`: 启用 Prometheus 对该路由的指标采集。
+
+以下是一个示例：
+```yaml
+apiVersion: openresty.huangzehong.me/v1alpha1
+kind: Location
+metadata:
+  name: sample-location
+  namespace: openresty-example
+spec:
+  entries:
+    - path: /openai/
+      proxyPass: https://openai-api/
+      enableUpstreamMetrics: true
+      accessLog: true
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+    - path: /eth/
+      proxyPass: https://eth-api/
+      proxyPassIsFullURL: true
+      enableUpstreamMetrics: true
+      accessLog: true
+      headersFromSecret:
+        - headerName: apikey
+          secretName: apikey
+          secretKey: apikey
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+    - path: /pay
+      proxyPass: https://pay-api/
+      proxyPassIsFullURL: true
+      enableUpstreamMetrics: true
+      accessLog: true
+      extra:
+        - "proxy_redirect off;"
+        - "proxy_ssl_server_name on;"
+```
 
 ## Upstream 示例
 
