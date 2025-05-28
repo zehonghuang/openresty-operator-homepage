@@ -199,10 +199,10 @@ spec:
       lon: "longitude"
       units:
         value: "metric"
-      appid:
-        queryFromSecret:
-          secretName: weather-api-key
-          secretKey: key
+    queryFromSecret:
+      - name: appid
+        secretName: weather-api-key
+        secretKey: key
 ```
 
 ### 示例二：重写Body
