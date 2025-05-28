@@ -155,12 +155,59 @@ spec:
 > ℹ️ This Upstream uses `FullURL` mode and embeds inline normalization logic using JSONPath and Lua. It will be rendered as a Lua-based route in Nginx.
 
 
+## NormalizeRule Examples
 
-## NormalizeRule Example
+> ⚠️ `NormalizeRule` is only effective for `Upstream` resources using `type: FullURL`.
+> It does not apply to standard `proxyPass` routing without Lua integration.
 
-This NormalizeRule transforms a business-side payment request into the structure expected by Alipay’s `alipay.trade.app.pay` API.
+These examples demonstrate how to configure request normalization using `NormalizeRule`,
+which is supported only in FullURL-mode Upstreams. You can transform fields from the original request
+body into query parameters or reformat the request body to match the target API.
 
-Here is an example incoming request:
+> You can use both query and body transformations together
+
+### With Query Parameters
+
+This example shows how to extract query parameters from a request body, including support for static values and secrets.
+
+- Use a dot-notated path (e.g., 'city') to extract a value from the request body.
+- Use value to provide a fixed, static value for the query parameter.
+- Use queryFromSecret to fetch the value from a Kubernetes Secret and include it as a query parameter.
+
+```yaml
+## Original request body
+## {
+##   "city": "Taipei",
+##   "region": {
+##     "latitude": "25.0330",
+##     "longitude": "121.5654"
+##   }
+## }
+
+## Transformed into this real request:
+## https://api.weatherapi.com/v1/forecast.json?q=Taipei&lat=25.0330&lon=121.5654&units=metric&appid=xxx
+apiVersion: openresty.huangzehong.me/v1alpha1
+kind: NormalizeRule
+metadata:
+  name: normalize-weather-query
+  namespace: openresty-example
+spec:
+  request:
+    query:
+      q: "city"
+      lat: "latitude"
+      lon: "longitude"
+      units:
+        value: "metric"
+      appid:
+        queryFromSecret:
+          secretName: weather-api-key
+          secretKey: key
+```
+
+### With Body Transformation
+
+> 🔁 Body transformation is also only supported when `Upstream.type` is set to `FullURL`.
 
 ```json
 {
@@ -228,7 +275,8 @@ is transformed into this internal format:
 }
 ```
 
-> 💡 In Lua blocks, `requestObj` and `responseObj` are built-in objects that represent the original request and response payloads. You can access and manipulate their fields using standard Lua syntax.
+> 💡 Lua blocks use `requestObj` and `responseObj` to represent the original request/response JSON payloads.
+> These objects are available only in `FullURL` mode and are your main interface for rewriting request/response content.
 
 And the NormalizeRule maps this structure into Alipay’s `bizContent` format:
 
@@ -240,7 +288,8 @@ metadata:
   namespace: openresty-example
 spec:
   request:
-    orderNo: "out_trade_no"
+    body:
+      orderNo: "out_trade_no"
     amount:
       lua: |
         return tonumber(requestObj.total_amount) or 0

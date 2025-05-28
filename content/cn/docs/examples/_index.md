@@ -157,9 +157,58 @@ spec:
 
 ## NormalizeRule 示例
 
-以下 NormalizeRule 将业务侧支付请求转换为支付宝 `alipay.trade.app.pay` 接口所需的参数结构：
+> ⚠️ `NormalizeRule` 仅对 `Upstream` 资源设置为 `type: FullURL` 时有效。
+> 如果你使用的是传统的 proxyPass 路由（非 Lua 模式），此功能将不会生效。
 
-下面是一个示例请求：
+本节展示了 NormalizeRule 的两个典型用法：  
+1. 将请求体中的字段提取为查询参数（query）；
+2. 对请求体进行结构重写（body），使其符合目标 API 格式。
+
+> 两种可以同时用
+
+### 示例一：提取uri参数
+
+你可以通过 NormalizeRule 将请求体中的字段转换为 URL 查询参数。支持：
+
+- 使用点路径（例如 `region.latitude`）提取嵌套字段；
+- 使用 `value` 字段指定固定值；
+- 使用 `queryFromSecret` 从 Kubernetes Secret 获取敏感值。
+
+```yaml
+## Original request body
+## {
+##   "city": "Taipei",
+##   "region": {
+##     "latitude": "25.0330",
+##     "longitude": "121.5654"
+##   }
+## }
+
+## Transformed into this real request:
+## https://api.weatherapi.com/v1/forecast.json?q=Taipei&lat=25.0330&lon=121.5654&units=metric&appid=xxx
+apiVersion: openresty.huangzehong.me/v1alpha1
+kind: NormalizeRule
+metadata:
+  name: normalize-weather-query
+  namespace: openresty-example
+spec:
+  request:
+    query:
+      q: "city"
+      lat: "latitude"
+      lon: "longitude"
+      units:
+        value: "metric"
+      appid:
+        queryFromSecret:
+          secretName: weather-api-key
+          secretKey: key
+```
+
+### 示例二：重写Body
+
+当目标 API 要求特定的 JSON 请求结构时，可以使用 Lua 表达式生成所需内容。  
+你可以访问 `requestObj` 获取原始请求体字段，组合成目标结构。此功能同样仅在 FullURL 模式下有效。
 
 ```json
 {
@@ -192,7 +241,7 @@ spec:
 }
 ```
 
-转换后的真实结构如下：
+会被转换为如下内部结构：
 
 ```json
 {
@@ -227,9 +276,9 @@ spec:
 }
 ```
 
-> 💡 在 Lua 块中，`requestObj` 与 `responseObj` 是内置对象，分别代表原始请求和响应的 JSON 数据，可使用标准 Lua 语法进行字段访问与处理。
+> 💡 Lua 中的 `requestObj` 和 `responseObj` 分别表示原始请求和响应对象，仅在 FullURL 模式下可用。
 
-NormalizeRule 将该结构映射为支付宝 `bizContent` 格式：
+NormalizeRule 可将上述结构映射到支付宝的 `bizContent` 格式：
 
 ```yaml
 apiVersion: openresty.huangzehong.me/v1alpha1
@@ -239,7 +288,8 @@ metadata:
   namespace: openresty-example
 spec:
   request:
-    orderNo: "out_trade_no"
+    body:
+      orderNo: "out_trade_no"
     amount:
       lua: |
         return tonumber(requestObj.total_amount) or 0
